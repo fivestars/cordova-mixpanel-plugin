@@ -2,6 +2,7 @@
 
 var exec = require('cordova/exec'),
   mixpanel = {
+    disabled: false,
     people: {}
   },
   errors = {
@@ -20,6 +21,10 @@ mixpanel.alias = mixpanel.createAlias = function(alias, originalId, onSuccess, o
   }
 
   exec(onSuccess, onFail, 'Mixpanel', 'alias', [alias, originalId]);
+};
+
+mixpanel.disable = function disable() {
+  mixpanel.disabled = true;
 };
 
 mixpanel.distinctId = function(onSuccess, onFail) {
@@ -46,6 +51,10 @@ mixpanel.init = function(token, onSuccess, onFail) {
   exec(onSuccess, onFail, 'Mixpanel', 'init', [token]);
 };
 
+mixpanel.register = function register(properties, onSuccess, onFail) {
+  mixpanel.registerSuperProperties(properties, onSuccess, onFail);
+};
+
 mixpanel.registerSuperProperties = function(superProperties, onSuccess, onFail) {
   if (!superProperties || typeof superProperties !== 'object') {
     return onFail(errors.invalid('superProperties', superProperties));
@@ -63,6 +72,10 @@ mixpanel.showSurvey = function(onSuccess, onFail) {
 };
 
 mixpanel.track = function(eventName, eventProperties, onSuccess, onFail) {
+  if (mixpanel.disabled) {
+    return;
+  }
+
   if (!eventName || typeof eventName != 'string') {
     return onFail(errors.invalid('event', eventName));
   }

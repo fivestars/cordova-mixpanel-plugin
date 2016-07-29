@@ -71,6 +71,18 @@ mixpanel.showSurvey = function(onSuccess, onFail) {
   exec(onSuccess, onFail, 'Mixpanel', 'showSurvey', []);
 };
 
+mixpanel.time_event = function(eventName, onSuccess, onFail) {
+  if (mixpanel.disabled) {
+    return;
+  }
+
+  if (!eventName || typeof eventName != 'string') {
+    return onFail(errors.invalid('event', eventName));
+  }
+
+  exec(onSuccess, onFail, 'Mixpanel', 'timeEvent', [eventName]);
+};
+
 mixpanel.track = function(eventName, eventProperties, onSuccess, onFail) {
   if (mixpanel.disabled) {
     return;

@@ -55,6 +55,10 @@ mixpanel.register = function register(properties, onSuccess, onFail) {
   mixpanel.registerSuperProperties(properties, onSuccess, onFail);
 };
 
+mixpanel.unregister = function unregister(propertyName, onSuccess, onFail) {
+  mixpanel.unregisterSuperProperty(propertyName, onSuccess, onFail);
+};
+
 mixpanel.registerSuperProperties = function(superProperties, onSuccess, onFail) {
   if (!superProperties || typeof superProperties !== 'object') {
     return onFail(errors.invalid('superProperties', superProperties));
@@ -62,6 +66,11 @@ mixpanel.registerSuperProperties = function(superProperties, onSuccess, onFail) 
 
   exec(onSuccess, onFail, 'Mixpanel', 'registerSuperProperties', [superProperties]);
 };
+
+mixpanel.unregisterSuperProperty = function(propertyName, onSuccess, onFail) {
+  exec(onSuccess, onFail, 'Mixpanel', 'unregister', [propertyName]);
+};
+
 
 mixpanel.reset = function(onSuccess, onFail) {
   exec(onSuccess, onFail, 'Mixpanel', 'reset', []);

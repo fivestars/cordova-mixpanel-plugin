@@ -31,6 +31,7 @@ public class MixpanelPlugin extends CordovaPlugin {
         IDENTIFY("identify"),
         INIT("init"),
         REGISTER_SUPER_PROPERTIES("registerSuperProperties"),
+        UNREGISTER_SUPER_PROPERTY("unregisterSuperProperty"),
         RESET("reset"),
         SHOW_SURVEY("showSurvey"),
         TIME_EVENT("timeEvent"),
@@ -95,6 +96,8 @@ public class MixpanelPlugin extends CordovaPlugin {
                 return handleInit(args, cbCtx);
             case REGISTER_SUPER_PROPERTIES:
                 return handleRegisterSuperProperties(args, cbCtx);
+            case UNREGISTER_SUPER_PROPERTY:
+                return handleUnregisterSuperProperty(args, cbCtx);
             case RESET:
                 return handleReset(args, cbCtx);
             case SHOW_SURVEY:
@@ -191,6 +194,15 @@ public class MixpanelPlugin extends CordovaPlugin {
             superProperties = new JSONObject();
         }
         mixpanel.registerSuperProperties(superProperties);
+        cbCtx.success();
+        return true;
+    }
+
+    private boolean handleUnregisterSuperProperty(JSONArray args, final CallbackContext cbCtx) {
+        String superPropertyName = args.optString(0, "");
+        if (superPropertyName != "") {
+            mixpanel.unregisterSuperProperty(superPropertyName);
+        }
         cbCtx.success();
         return true;
     }
